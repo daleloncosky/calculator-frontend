@@ -12,7 +12,7 @@ function App() {
     setError(null); // Reset error message
 
     try {
-      const response = await axios.post("hhttps://calculator-oxw4.onrender.com/app", {
+      const response = await axios.post("https://calculator-oxw4.onrender.com/calculate", {
         first_number: firstNumber,
         second_number: secondNumber,
         operation: operation,
