@@ -12,7 +12,7 @@ function App() {
     setError(null); // Reset error messag e
 
     try {
-      const response = await axios.post("https://calculator2.hypsster.com/calculate", {
+      const response = await axios.post("https://calculator.hypsster.com", {
         first_number: firstNumber,
         second_number: secondNumber,
         operation: operation,
