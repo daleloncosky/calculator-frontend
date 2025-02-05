@@ -9,7 +9,7 @@ function App() {
   const [error, setError] = useState(null);
 
   const handleCalculate = async () => {
-    setError(null); // Reset error message
+    setError(null); // Reset error messag e
 
     try {
       const response = await axios.post("https://ec2-13-58-20-183.us-east-2.compute.amazonaws.com/calculate", {
