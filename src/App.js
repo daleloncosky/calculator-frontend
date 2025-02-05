@@ -12,7 +12,7 @@ function App() {
     setError(null); // Reset error message
 
     try {
-      const response = await axios.post("https://ec2-13-58-20-183.us-east-2.compute.amazonaws.com/calculate", {
+      const response = await axios.post("http://ec2-13-58-20-183.us-east-2.compute.amazonaws.com/calculate", {
         first_number: firstNumber,
         second_number: secondNumber,
         operation: operation,
