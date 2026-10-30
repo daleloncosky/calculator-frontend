@@ -1,43 +1,25 @@
-import axios from "axios";
+import axios from 'axios';
+const API_BASE = (import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? 'http://localhost:5001' : 'https://calculator2.hypsster.com')).replace(/\/$/, '');
 
-const API_URL = "https://calculator2.hypsster.com/calculate";
-
-const handleCalculate = async (firstNumber, secondNumber, operation, setResult, setError) => {
-    try {
-        // Convert input to numbers
-        const num1 = parseFloat(firstNumber);
-        const num2 = parseFloat(secondNumber);
-
-        if (isNaN(num1) || isNaN(num2)) {
-            setError("Please enter valid numbers.");
-            setResult(null);
-            return;
-        }
-
-        console.log("Sending request to API:", API_URL);
-        console.log("Payload:", { first_number: num1, second_number: num2, operation });
-
-        const response = await axios.post(API_URL, {
-            first_number: num1,
-            second_number: num2,
-            operation: operation,
-        }, {
-            headers: { "Content-Type": "application/json" }
-        });
-
-        console.log("Response received:", response.data);
-
-        if (response.data.error) {
-            setError(response.data.error);
-            setResult(null);
-        } else {
-            setResult(response.data.result);
-        }
-    } catch (err) {
-        console.error("API request failed:", err);
-        setError("Server error. Please try again later.");
-        setResult(null);
+export default async function handleCalculate(firstNumber, secondNumber, operation, setResult, setError) {
+  setResult(null);
+  setError(null);
+  const first = Number(firstNumber);
+  const second = Number(secondNumber);
+  if (!String(firstNumber).trim() || !String(secondNumber).trim() || !Number.isFinite(first) || !Number.isFinite(second)) {
+    setError('Please enter two finite numbers.');
+    return;
+  }
+  try {
+    const response = await axios.post(API_BASE + '/calculate', { first_number: first, second_number: second, operation }, { timeout: 10000 });
+    if (response.data.error) {
+      setError(response.data.error);
+    } else if (typeof response.data.result === 'number' && Number.isFinite(response.data.result)) {
+      setResult(response.data.result);
+    } else {
+      setError('The service returned an invalid result.');
     }
-};
-
-export default handleCalculate;
+  } catch (error) {
+    setError(error.response?.data?.error || 'Unable to reach the calculator service. Try again.');
+  }
+}
